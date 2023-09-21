@@ -63,29 +63,29 @@ const resultados = [
 ];
 
 
-const calcularCumplimientoObjetivo = (objetivo,atendidas,reingresadas) => {
-    return Math.floor(((prom - det) / totalEncuestas) * 100);
+const calcularCumplimientoObjetivo = (atendidas,reingresadas) => {
+    return Math.floor((reingresadas * 100) / atendidas);
 }
 const calcularDesempenio = () => {
-    return Math.floor((cumplimientoObjetivo / objetivo) * 100);
+    return Math.floor(((100 - cumplimientoObjetivo) * 100) / (100 - objetivo));
 }
 
-const calcularPromotoresASumar = () => {
-    let promotoresIniciales = promotores;
+const calcularLlamadasASumar = () => {
+    let totalAtendidasInicial = atendidas;
     let cumplimientoObjetivoInicial = cumplimientoObjetivo;
-    let acumulacionDePromotores;
+    let acumulacionDeLlamadas;
 
     for(let i = 0; !(cumplimientoObjetivoInicial >= objetivo) ; i++){
     
-        cumplimientoObjetivoInicial = calcularCumplimientoObjetivo(promotoresIniciales, neutros, detractores);
+        cumplimientoObjetivoInicial = calcularCumplimientoObjetivo(atendidas, reingresadas);
         
-        promotoresIniciales++;
+        totalAtendidasInicial++;
         
-        acumulacionDePromotores = i;
+        acumulacionDeLlamadas = i;
         
       }
       
-      return acumulacionDePromotores; 
+      return acumulacionDeLlamadas; 
  
 }
 
@@ -103,35 +103,29 @@ const animar = () => {
 
 
 
-inputPromotores.addEventListener('input', () => {
-    promotores = parseInt(inputPromotores.value);
-    /* isButtonOn() */
-    console.log(promotores)
+inputObjetivo.addEventListener('input', () => {
+    objetivo = parseInt(inputObjetivo.value);
 });
 
-inputNeutros.addEventListener('input', () => {
-    neutros = parseInt(inputNeutros.value); 
-    /* isButtonOn() */
-    console.log(neutros)
+inputAtendidas.addEventListener('input', () => {
+    atendidas = parseInt(inputAtendidas.value); 
 });
 
-inputDetractores.addEventListener('input', () => {
-    detractores = parseInt(inputDetractores.value);
-    /* isButtonOn() */
-    console.log(detractores)
+inputReingresadas.addEventListener('input', () => {
+    reingresadas = parseInt(inputReingresadas.value);
 });
 
 
 calcButton.addEventListener('click', () => {
 
-    cumplimientoObjetivo = calcularCumplimientoObjetivo(promotores,neutros,detractores);
+    cumplimientoObjetivo = calcularCumplimientoObjetivo();
 
     desempenio = calcularDesempenio();
 
     if(cumplimientoObjetivo < objetivo){
         promotoresASumar = calcularPromotoresASumar();
 
-        mensajeObjetivo.innerText = `Sumá ${promotoresASumar} llamadas y alcanzá el objetivo`;
+        mensajeObjetivo.innerText = `Sumá ${llamadasASumar} llamadas y alcanzá el objetivo`;
     } else {
         mensajeObjetivo.innerText = 'Estás en objetivo';
     }
