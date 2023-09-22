@@ -81,7 +81,7 @@ const calcularLlamadasASumar = (totalIn, totalRein, obj, rein) => {
 
 const calcularDesempenio = (rein, obj) => {
     //return parseFloat(((100 - rein) * 100) / (100- obj)).toFixed(2);
-    return parseFloat(((rein - obj) / obj)).toFixed(2) + 1;
+    return parseFloat(((rein - obj) / obj)).toFixed(2) - 1;
 }
 
 const filtrarResultadoMetrica = (des) => {
