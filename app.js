@@ -23,6 +23,7 @@ let objetivoMovil;
 let totalAtendidas;
 let totalReingresadas;
 let reingreso;
+let desempenio;
 
 const resultados = [
     {
@@ -119,7 +120,7 @@ calcButton.addEventListener('click', () => {
         mensajeObjetivo.innerText = 'Estás en objetivo';
     }
 
-    let desempenio = calcularDesempenio(reingreso, objetivoMovil);
+    desempenio = calcularDesempenio(reingreso, objetivoMovil);
 
     resultadoMetrica = filtrarResultadoMetrica(desempenio);
 
