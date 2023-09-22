@@ -98,7 +98,7 @@ const animar = () => {
 }
 
 inputObjetivo.addEventListener('input', () => {
-    objetivoMovil = parseInt(inputObjetivo.value);
+    objetivoMovil = parseFloat(inputObjetivo.value).toFixed(2);
 });
 
 inputAtendidas.addEventListener('input', () => {
