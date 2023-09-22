@@ -19,78 +19,71 @@ const calcButton = document.querySelector('#calc-button');
 const calcular = document.querySelector('#calcular');
 const cerrar = document.querySelector('#cerrado');
 
-let objetivo;
-let atendidas;
-let reingresadas;
-let cumplimientoObjetivo;
-let desempenio;
-let llamadasASumar;
-let resultadoMetrica;
+let objetivoMovil;
+let totalAtendidas;
+let totalReingresadas;
+let reingreso;
 
 const resultados = [
     {
         resultado: 'SOBRESALIENTE',
         estilos: 'sobresaliente',
         mensaje: '¡Excelente! 👏🏼',
-        compararDesempenio: () => {
-            return desempenio > 115;
+        compararDesempenio(des) {
+            return des > 115;
         }
     },
     {
         resultado: 'ADECUADO',
         estilos: 'adecuado',
         mensaje: '¡A seguir así! 🙌🏼',
-        compararDesempenio: () => {
-            return desempenio >= 100 && desempenio <= 115;
+        compararDesempenio(des) {
+            return des >= 100 && des <= 115;
         }
     },
     {
         resultado: 'A MEJORAR',
         estilos: 'a-mejorar',
         mensaje: 'Podés lograrlo 💪🏼',
-        compararDesempenio: () => {
-            return desempenio >= 70 && desempenio < 100;
+        compararDesempenio(des) {
+            return des >= 70 && des < 100;
         }
     },
     {
         resultado: 'INADECUADO',
         estilos: 'inadecuado',
         mensaje: '¡Manos a la obra!',
-        compararDesempenio: () => {
-            return desempenio < 70;
+        compararDesempenio(des) {
+            return des < 70;
         }
     }
 ];
 
-
-const calcularCumplimientoObjetivo = (atendidas,reingresadas) => {
-    return Math.floor((reingresadas * 100) / atendidas);
-}
-const calcularDesempenio = () => {
-    return Math.floor(((100 - cumplimientoObjetivo) * 100) / (100 - objetivo));
+const calcularReingreso = (total, rein) => {
+    return parseFloat((rein * 100) / total).toFixed(2);
 }
 
-const calcularLlamadasASumar = () => {
-    let totalAtendidasInicial = atendidas;
-    let cumplimientoObjetivoInicial = cumplimientoObjetivo;
-    let acumulacionDeLlamadas;
+const calcularLlamadasASumar = (totalIn, totalRein, obj, rein) => {
+    let totalAtendidasInicial = totalIn;
+    let reingresoInicial = rein;
+    let accLlamadas;
 
-    for(let i = 0; !(cumplimientoObjetivoInicial >= objetivo) ; i++){
-    
-        cumplimientoObjetivoInicial = calcularCumplimientoObjetivo(atendidas, reingresadas);
-        
+    for (let i = 0; reingresoInicial > obj; i++) {
+        reingresoInicial = calcularReingreso(totalAtendidasInicial, totalRein);
         totalAtendidasInicial++;
-        
-        acumulacionDeLlamadas = i;
-        
-      }
-      
-      return acumulacionDeLlamadas; 
- 
+        accLlamadas = i;
+    }
+
+    return accLlamadas;
+
 }
 
-const filtrarResultadoMetrica = () => {
-    return resultados.filter(result => result.compararDesempenio());
+const calcularDesempenio = (rein, obj) => {
+    return Math.floor(((100 - rein) * 100) / (100- obj));
+}
+
+const filtrarResultadoMetrica = (des) => {
+    return resultados.filter(result => result.compararDesempenio(des));
 }
 
 const animar = () => {
@@ -101,43 +94,38 @@ const animar = () => {
     cerrar.classList.toggle('inactive');
 }
 
-
-
 inputObjetivo.addEventListener('input', () => {
-    objetivo = parseInt(inputObjetivo.value);
+    objetivoMovil = parseInt(inputObjetivo.value);
 });
 
 inputAtendidas.addEventListener('input', () => {
-    atendidas = parseInt(inputAtendidas.value); 
+    totalAtendidas = parseInt(inputAtendidas.value); 
 });
 
 inputReingresadas.addEventListener('input', () => {
-    reingresadas = parseInt(inputReingresadas.value);
+    totalReingresadas = parseInt(inputReingresadas.value);
 });
-
 
 calcButton.addEventListener('click', () => {
 
-    cumplimientoObjetivo = calcularCumplimientoObjetivo();
+    reingreso = calcularReingreso(totalAtendidas, totalReingresadas);
 
-    desempenio = calcularDesempenio();
-
-    if(cumplimientoObjetivo < objetivo){
-        promotoresASumar = calcularPromotoresASumar();
+    if(reingreso > objetivoMovil){
+        llamadasASumar = calcularLlamadasASumar(totalAtendidas, totalReingresadas, objetivoMovil,reingreso);
 
         mensajeObjetivo.innerText = `Sumá ${llamadasASumar} llamadas y alcanzá el objetivo`;
     } else {
         mensajeObjetivo.innerText = 'Estás en objetivo';
     }
 
-    resultadoMetrica = filtrarResultadoMetrica();
+    let desempenio = calcularDesempenio(reingreso, objetivoMovil);
 
-    
+    resultadoMetrica = filtrarResultadoMetrica(desempenio);
 
     containerTituloDesempenio.classList.toggle(resultadoMetrica[0].estilos);
     tituloCard.innerText = resultadoMetrica[0].resultado;
     containerPorcentaje.classList.toggle(resultadoMetrica[0].estilos);
-    porcentaje.innerText = `${cumplimientoObjetivo}%`;
+    porcentaje.innerText = `${desempenio}%`;
     mensaje.innerText = resultadoMetrica[0].mensaje;
 
     animar();

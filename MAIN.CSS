@@ -82,7 +82,7 @@ h1 {
     align-items: center;
 }
 
-.container-objetivo {
+.container-objetivoMovil {
     background-color: #84A1E3;
 }
 
@@ -103,7 +103,7 @@ h1 {
     border-bottom: 1px solid;
 }
 
-.container-objetivo, .form-tittle-objetivo,#input-objetivo {
+.container-objetivoMovil, .form-tittle-objetivo,#input-objetivo {
     border-color: #5475BF;
 }
 
